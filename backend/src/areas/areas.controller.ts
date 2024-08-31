@@ -17,6 +17,7 @@ import { UserRole, Usuario } from 'src/usuarios/entities/usuario.entity'
 import { AreasService } from './areas.service'
 import { CreateAreaDto } from './dto/create-area.dto'
 import { UpdateAreaDto } from './dto/update-area.dto'
+import { Public } from 'src/decorators/public.decorator'
 
 @Controller('areas')
 @ApiTags('Areas')
@@ -30,6 +31,7 @@ export class AreasController {
   }
 
   @Get()
+  @Public()
   @Roles(UserRole.FISCAL, UserRole.INSTITUTION)
   async findAll() {
     return this.areasService.findAll()
@@ -41,12 +43,12 @@ export class AreasController {
   }
 
   @Get(':id')
+  @Public()
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.areasService.findOne(id)
   }
 
   @Patch(':id')
-  @ApiBearerAuth()
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAreaDto: UpdateAreaDto,
@@ -55,7 +57,6 @@ export class AreasController {
   }
 
   @Delete(':id')
-  @ApiBearerAuth()
   async remove(@Param('id', ParseIntPipe) id: number) {
     return this.areasService.remove(id)
   }

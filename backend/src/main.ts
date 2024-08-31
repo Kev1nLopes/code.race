@@ -3,6 +3,8 @@ import { NestFactory, Reflector } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard'
+import * as cron from 'node-cron';
+import { VerificarClimaSemanal } from 'utils/tomorrow'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
@@ -18,5 +20,9 @@ async function bootstrap() {
 
   app.useGlobalGuards(new JwtAuthGuard(app.get(Reflector)))
   await app.listen(3000)
+
+  cron.schedule('0 6 * * *', () => {
+    console.log('Executando tarefa agendada');
+  })
 }
 bootstrap()

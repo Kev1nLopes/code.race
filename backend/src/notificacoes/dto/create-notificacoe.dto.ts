@@ -3,12 +3,11 @@ import { IsNotEmpty } from "class-validator"
 
 export class CreateNotificacoeDto {
 
-
     @ApiProperty()
     @IsNotEmpty({message: 'Informe a descrição da notificaçãos'})
     descricao: String
 
-    @ApiProperty()
+    @ApiProperty({example: 'erro | aviso | normal'})
     @IsNotEmpty({message: 'Informe o tipo da notificação'})
     tipo: String
 

@@ -3,6 +3,7 @@ import { MarkersService } from './markers.service';
 import { CreateMarkerDto } from './dto/create-marker.dto';
 import { UpdateMarkerDto } from './dto/update-marker.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/decorators/public.decorator';
 
 @Controller('pontos')
 @ApiTags('Pontos')
@@ -18,12 +19,14 @@ export class MarkersController {
   }
 
   @Get()
+  @Public()
   async findAll(@Res() res) {
     const response = await this.markersService.findAll();
     res.status(response.status).json(response.message)
   }
 
   @Get(':id')
+  @Public()
   async findOne(@Param('id') id: string, @Res() res) {
     const response = await this.markersService.findOne(+id);
     res.status(response.status).json(response.message)
