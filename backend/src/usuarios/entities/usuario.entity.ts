@@ -1,3 +1,4 @@
+import { Area } from 'src/areas/entities/area.entity'
 import { Log } from 'src/logs/entities/log.entity'
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
@@ -50,4 +51,7 @@ export class Usuario {
 
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole
+
+  @OneToMany(() => Area, (area) => area.createdBy)
+  areas: Area[]
 }
