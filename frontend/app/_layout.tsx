@@ -1,65 +1,49 @@
-import { Tabs } from 'expo-router'
-import React from 'react'
+import { useFonts } from 'expo-font'
+import { Stack } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
+import { useEffect } from 'react'
+import 'react-native-reanimated'
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon'
-import { Colors } from '@/constants/Colors'
+import { SessionProvider } from '@/hooks/SessionContext'
 import { useColorScheme } from '@/hooks/useColorScheme'
+import { config } from '@tamagui/config'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { createTamagui, TamaguiProvider } from 'tamagui'
 
-export default function TabLayout() {
+const tamaguiConfig = createTamagui(config)
+
+const queryClient = new QueryClient()
+
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync()
+
+export default function RootLayout() {
   const colorScheme = useColorScheme()
+  const [loaded] = useFonts({
+    Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
+    InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+  })
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync()
+    }
+  }, [loaded])
+
+  if (!loaded) {
+    return null
+  }
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}
-    >
-      <Tabs.Screen
-        name='index'
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'home' : 'home-outline'}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name='map'
-        options={{
-          title: 'Mapa',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'map' : 'map-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name='info'
-        options={{
-          title: 'Informações',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'code-slash' : 'code-slash-outline'}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name='profile'
-        options={{
-          title: 'Perfil',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'person' : 'person-outline'}
-              color={color}
-            />
-          ),
-        }}
-      />
-    </Tabs>
+    <TamaguiProvider config={tamaguiConfig}>
+      <SessionProvider>
+        <QueryClientProvider client={queryClient}>
+          <Stack>
+            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+            <Stack.Screen name='+not-found' />
+          </Stack>
+        </QueryClientProvider>
+      </SessionProvider>
+    </TamaguiProvider>
   )
 }
