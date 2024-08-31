@@ -1,6 +1,7 @@
 import { useAreasCurrentUser } from '@/features/area/hooks'
-import { FlatList } from 'react-native'
-import { Text } from 'tamagui'
+import { RefreshControl } from 'react-native'
+import { ScrollView, Text } from 'tamagui'
+import { AreaCard } from './AreaCard'
 
 export function AreasSubmetidasCard() {
   const areas = useAreasCurrentUser()
@@ -10,10 +11,17 @@ export function AreasSubmetidasCard() {
   }
 
   return (
-    <FlatList
-      data={areas.data}
-      keyExtractor={area => area.id.toString()}
-      renderItem={({ item }) => <Text>{item.tipo}</Text>}
-    />
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={areas.isFetching}
+          onRefresh={areas.refetch}
+        />
+      }
+    >
+      {areas.data.map(area => (
+        <AreaCard key={area.id} area={area} />
+      ))}
+    </ScrollView>
   )
 }

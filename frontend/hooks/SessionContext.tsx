@@ -1,5 +1,6 @@
 import { Usuario } from '@/features/usuario/types'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   createContext,
   PropsWithChildren,
@@ -15,7 +16,7 @@ export type SessionContextType = {
   user: Usuario | null
   setUser: (user: Usuario | null) => void
   signIn: (fields: LoginFields) => Promise<void>
-  signOut: () => void
+  signOut: () => Promise<void>
 }
 
 export const loginSchema = z.object({
@@ -33,6 +34,7 @@ export function SessionProvider(props: PropsWithChildren) {
   const { api } = useApi()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [user, setUser] = useState<Usuario | null>(null)
+  const queryClient = useQueryClient()
 
   async function signIn(fields: LoginFields) {
     api.post('/auth/signin', fields).then(res => {
@@ -42,10 +44,11 @@ export function SessionProvider(props: PropsWithChildren) {
     })
   }
 
-  function signOut() {
+  async function signOut() {
+    await AsyncStorage.removeItem('token')
     setUser(null)
     setIsAuthenticated(false)
-    AsyncStorage.removeItem('token')
+    queryClient.clear()
   }
 
   useEffect(() => {

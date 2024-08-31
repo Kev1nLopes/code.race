@@ -36,14 +36,14 @@ export default function RootLayout() {
 
   return (
     <TamaguiProvider config={tamaguiConfig}>
-      <SessionProvider>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <SessionProvider>
           <Stack>
             <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
             <Stack.Screen name='+not-found' />
           </Stack>
-        </QueryClientProvider>
-      </SessionProvider>
+        </SessionProvider>
+      </QueryClientProvider>
     </TamaguiProvider>
   )
 }

@@ -24,14 +24,13 @@ export class AreasService {
       }
 
       let novaArea = this.areaRepository.create()
+      novaArea.nome = createAreaDto.nome
       novaArea.aprovado = false
       novaArea.poligonos = createAreaDto.poligonos
       novaArea.tipo = createAreaDto.tipo
       novaArea.createdBy = user
 
-      await this.areaRepository.save(novaArea)
-
-      return novaArea
+      return this.areaRepository.save(novaArea)
     } catch (error) {
       throw new BadRequestException('Não foi possível cadastrar o usuário')
     }
