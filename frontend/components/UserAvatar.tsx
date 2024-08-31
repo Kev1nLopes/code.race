@@ -2,6 +2,7 @@ import { Image } from 'tamagui'
 
 export type UserAvatarProps = {
   name: string
+  size?: number
 }
 
 const diceBearAvatar = (seed: string) =>
@@ -10,9 +11,9 @@ const diceBearAvatar = (seed: string) =>
 export function UserAvatar(props: UserAvatarProps) {
   return (
     <Image
-      width={64}
-      height={64}
-      borderRadius={32}
+      width={props.size ?? 64}
+      height={props.size ?? 64}
+      borderRadius={props.size ? props.size / 2 : 32}
       src={diceBearAvatar(props.name.replaceAll(' ', '++'))}
       alt={`Avatar de ${props.name}`}
     />

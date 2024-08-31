@@ -1,7 +1,8 @@
 import { Area } from 'src/areas/entities/area.entity'
 import { Log } from 'src/logs/entities/log.entity'
 import { Marker } from 'src/markers/entities/marker.entity'
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Notificacoes } from 'src/notificacoes/entities/notificacoes.entity'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
 export enum UserRole {
   USER = 'USER',
@@ -59,4 +60,6 @@ export class Usuario {
   @OneToMany(() => Area, (area) => area.createdBy)
   areas: Area[]
 
+  @OneToMany(() => Notificacoes, (notificacoes) => notificacoes.sender)
+  notificacoes: Notificacoes[]
 }
