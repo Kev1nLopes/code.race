@@ -7,6 +7,8 @@ import MapView, { LatLng, MapPressEvent, Marker, MarkerPressEvent, Polygon, Poly
 interface SafePlace {
     id: string,
     coordinate: LatLng,
+    latitude?: number
+    longitude?: number
     title: string,
     description: string
 }
@@ -41,9 +43,11 @@ export default function Map() {
         setVisible(true)
     }
 
-    useEffect(()=>{/*
-        api.get<SafePlace[]>("/markers").then((res)=>{
-            setSafePlaces(res.data)
+    useEffect(()=>{
+        api.get<SafePlace[]>("/pontos").then((res)=>{
+            const data = res.data;
+            data.forEach(e=> e.coordinate = {latitude: e.latitude!, longitude: e.longitude!})
+            setSafePlaces(data)
         }).catch((err)=>{
             console.log("[GET/MARKERS] "+err)
         })
@@ -51,8 +55,8 @@ export default function Map() {
             setRiskAreas(res.data);
         }).catch((err)=>{
             console.log("[GET/AREAS] "+ err)
-        })*/
-        setSafePlaces([
+        })
+        /*setSafePlaces([
             {
                 id: "1",
                 coordinate: {latitude: -29.691828842370427, longitude:-53.80606971771388},
@@ -75,7 +79,7 @@ export default function Map() {
                     ]
                 }
             }
-        ])
+        ])*/
     }, [])
 
     const addRisk = () => {
@@ -106,7 +110,18 @@ export default function Map() {
     }
  
     const saveRisk = () => {
-
+        api.post("/ponto", 
+            {
+                titulo: risk.titulo,
+                descricao: risk.descricao,
+                latitude: position.latitude,
+                longitude: position.longitude
+            }).then((res)=>{
+            console.log("sla poha")
+            Alert.alert("Sucesso!", "Problema enviado e sera avaliado pelas entidades responsaveis")
+        }).finally(()=>{
+            setRisk(undefined)
+        })
     }
 
     const polygonCalback = (e: PolygonPressEvent) => {
