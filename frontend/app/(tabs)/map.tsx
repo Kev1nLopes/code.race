@@ -1,6 +1,7 @@
 import useApi from "@/hooks/useApi";
+import { LucideCheck, LucideX } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { Button, Image, Modal, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Alert, Button, Image, Modal, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import MapView, { LatLng, MapPressEvent, Marker, MarkerPressEvent, Polygon, PolygonPressEvent } from "react-native-maps";
 
 interface SafePlace {
@@ -27,6 +28,12 @@ export default function Map() {
     const [safePlaces, setSafePlaces] = useState<SafePlace[]>([]);
     const [visible, setVisible] = useState(false)
     const [selectedMarker, setSelectedMarker] = useState<SafePlace>();
+
+    const [riskModal, setRiskModal] = useState(false);
+    const [risk, setRisk] = useState<any>({});
+    const [position, setPosition] = useState({latitude: -29.69195740604275, longitude: -53.79072837121402})
+
+    const [positioning, setPositioning] = useState(false);
 
     const onMarkerPress = (e: MarkerPressEvent) => {
         const marker = safePlaces.find((m)=> m.id === e.nativeEvent.id)
@@ -71,6 +78,16 @@ export default function Map() {
         ])
     }, [])
 
+    const addRisk = () => {
+        setRiskModal(true)
+    }
+
+    const createRisk = () => {
+        Alert.alert("Posicione o nmarcador", "Voce deve posivionar o marcador no local que o problema esta localizado")
+        setPositioning(true)
+        setRiskModal(false)
+    }
+
     const mapPress = (e: MapPressEvent) => {
         const point = e.nativeEvent.coordinate
         const area = riskAreas.find((e)=> isPointInPolygon(point, e))
@@ -86,6 +103,10 @@ export default function Map() {
             })
             setVisible(true)
         }
+    }
+ 
+    const saveRisk = () => {
+
     }
 
     const polygonCalback = (e: PolygonPressEvent) => {
@@ -104,7 +125,7 @@ export default function Map() {
                 onMarkerPress={onMarkerPress}
                 onPress={mapPress}
             >
-                {safePlaces.map((marker, index)=>(
+                {!positioning ? safePlaces.map((marker, index)=>(
                     <Marker
                         identifier={marker.id}
                         key={index}
@@ -113,7 +134,13 @@ export default function Map() {
                         description={marker.description}
                         image={require("@/assets/images/safeplace.png")}
                     />
-                ))}
+                )): (
+                    <Marker 
+                        coordinate={position}
+                        draggable={true}
+                        onDragEnd={(e)=>setPosition(e.nativeEvent.coordinate)}
+                    />
+                )}
                 {riskAreas.map((area, index)=>(
                     <Polygon key={index}
                         coordinates={area.coordinates.perimetro}
@@ -142,7 +169,66 @@ export default function Map() {
                     }} 
                     title="Fechar"
                 />
-            </Modal> 
+            </Modal>
+            { !positioning ? (
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={addRisk}
+                    style={styles.touchableOpacityStyle}>
+                    <Image
+                        source={{
+                            uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png',
+                        }}
+                        style={styles.floatingButtonStyle}
+                    />
+                </TouchableOpacity>
+            ) : (
+                <View>
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={saveRisk}
+                        style={styles.touchableOpacityStyle2}>
+                        <Image
+                            source={{
+                                uri: 'https://cdn4.iconfinder.com/data/icons/web-ui-color/128/Checkmark-512.png',
+                            }}
+                            style={styles.floatingButtonStyle}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={()=>{
+                            setPositioning(false)
+                            setRisk(undefined)
+                        }}
+                        style={styles.touchableOpacityStyle}>
+                        <Image
+                            source={{
+                                uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Eo_circle_red_letter-x.svg/2048px-Eo_circle_red_letter-x.svg.png',
+                            }}
+                            style={styles.floatingButtonStyle}
+                        />
+                    </TouchableOpacity>
+                </View>
+            )}
+            <Modal visible={riskModal}>
+                <View style={{height: "95%", justifyContent: 'center', alignItems: 'center'}}>
+                    <TextInput style={styles.input} placeholder="Problema" value={risk?.titulo ?? ""} 
+                        onChangeText={(t)=>setRisk({...risk, titulo: t})}
+                    />
+                    <TextInput style={styles.input} placeholder="Descrição" value={risk?.descricao ?? ""}
+                        onChangeText={(t)=>setRisk({...risk, descricao: t})}
+                    />
+                    <Button title="Criar" onPress={createRisk} />
+                </View>
+                <Button 
+                    onPress={()=>{
+                        setRiskModal(!riskModal)
+                        setRisk(undefined)
+                    }}
+                    title="Fechar"
+                />
+            </Modal>
         </SafeAreaView>
     )
 }
@@ -156,6 +242,37 @@ const styles = StyleSheet.create({
     map: {
         width: '100%',
         height: '100%',
+    },
+    touchableOpacityStyle: {
+      position: 'absolute',
+      width: 50,
+      height: 50,
+      alignItems: 'center',
+      justifyContent: 'center',
+      right: 30,
+      bottom: 30,
+    },
+    floatingButtonStyle: {
+      resizeMode: 'contain',
+      width: 50,
+      height: 50,
+    },
+    touchableOpacityStyle2: {
+      position: 'absolute',
+      width: 50,
+      height: 50,
+      alignItems: 'center',
+      justifyContent: 'center',
+      left: 30,
+      bottom: 30,
+    },
+    input: {
+        borderRadius: 10,
+        borderWidth: 1,
+        width: "90%",
+        height: 40,
+        margin: 5,
+        padding: 5
     }
 })
 

@@ -36,7 +36,7 @@ const InfoData: Info[] = [
   },
 ]
 
-export default async function Info() {
+export default function Info() {
   return (
     <View>
       <View>
@@ -45,9 +45,8 @@ export default async function Info() {
       </View>
 
       <View>
-        {InfoData.map((item) => {
-          return (
-            <Card link={item.link}>
+        {InfoData.map((item, index) => (
+            <Card link={item.link} key={index}>
               <View style={styles.content}>
                 <View>
                   <Image source={item.image} style={styles.image} />
@@ -58,8 +57,8 @@ export default async function Info() {
                 </View>
               </View>
             </Card>
-          );
-        })}
+          )
+        )}
       </View>
     </View>
   );

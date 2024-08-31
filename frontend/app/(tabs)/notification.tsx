@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Image, ImageSourcePropType } from "react-native";
 import UseApi from '../../hooks/useApi'
 import { Card } from '../../components/Card';
+import { useEffect, useState } from "react";
 
 type Notifications = {
   image: ImageSourcePropType | undefined,
@@ -9,15 +10,21 @@ type Notifications = {
   sender: string,
 }
 
-export default async function Notifications() {
+export default function Notifications() {
   const {api} = UseApi();
-  const notifications = await api.get('/aa') as Notifications[];
+  const [notifications, setNotifications] = useState<any[]>([])
+  
+  useEffect(()=>{
+    api.get("/notificacoes").then((res)=>{
+      setNotifications(res.data);
+    })
+  }, [])
 
   return (
     <View>
       {notifications.map((item) => {
         return (
-          <Card>
+          <Card link="">
             <View style={styles.content}>
               <View>
                 <Image source={item.image} style={styles.image} />
