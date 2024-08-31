@@ -9,7 +9,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common'
-import { ApiBearerAuth } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { RolesGuard } from 'src/auth/guards/roles.guard'
 import { ReqUser } from 'src/decorators/req-user.decorator'
 import { Roles } from 'src/decorators/roles.decorator'
@@ -19,6 +19,7 @@ import { CreateAreaDto } from './dto/create-area.dto'
 import { UpdateAreaDto } from './dto/update-area.dto'
 
 @Controller('areas')
+@ApiTags('Areas')
 @UseGuards(RolesGuard)
 export class AreasController {
   constructor(private readonly areasService: AreasService) {}

@@ -2,9 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/
 import { MarkersService } from './markers.service';
 import { CreateMarkerDto } from './dto/create-marker.dto';
 import { UpdateMarkerDto } from './dto/update-marker.dto';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
-@Controller('markers')
+@Controller('pontos')
+@ApiTags('Pontos')
 export class MarkersController {
   constructor(private readonly markersService: MarkersService) {}
 
