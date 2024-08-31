@@ -1,31 +1,26 @@
-import { Image, StyleSheet, Platform, View } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { router } from 'expo-router'
+import { Button, Text, View } from 'tamagui'
 
 export default function HomeScreen() {
-  return (
-   <View><ThemedText>bbbbb</ThemedText></View>
-  );
-}
+  function navigateToMap() {
+    router.push('/map')
+  }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+  return (
+    <View padding='$6'>
+      <Text color='black' fontSize={20}>
+        O SaferNow é um aplicativo que ajuda você a se manter conectado e seguro
+        em ocasiões de desastres naturais.
+      </Text>
+      <View>
+        <Text color='black' fontSize={20}>
+          Procure no mapa pelo abrigo mais próximo, áreas de risco e seguras, e
+          receba alertas em tempo real de ocorrências eminentes.
+        </Text>
+      </View>
+      <Button marginTop='$8' onPress={navigateToMap}>
+        Ir para o Mapa
+      </Button>
+    </View>
+  )
+}
