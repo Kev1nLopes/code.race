@@ -33,7 +33,7 @@ export class AreasService {
 
       return novaArea
     } catch (error) {
-      throw new BadRequestException('')
+      throw new BadRequestException('Não foi possível cadastrar o usuário')
     }
   }
 

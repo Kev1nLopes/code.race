@@ -13,20 +13,20 @@ export class NotificacoesController {
   async create(@Body() createNotificacoeDto: CreateNotificacoeDto, @Res() res) {
 
     const response = await this.notificacoesService.create(createNotificacoeDto);
-    res.status(response.status).message(response.message)
+    res.status(response.status).json(response.message)
   }
 
   @Get()
   async findAll(@Res() res) {
     
     const response = await this.notificacoesService.findAll();
-    res.status(response.status).message(response.message)    
+    res.status(response.status).json(response.message)    
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string, @Res() res) {
     const response = await this.notificacoesService.findOne(+id);
-    res.status(response.status).message(response.message)
+    res.status(response.status).json(response.message)
 
   }
 

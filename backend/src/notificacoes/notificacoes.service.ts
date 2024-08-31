@@ -3,13 +3,15 @@ import { CreateNotificacoeDto } from './dto/create-notificacoe.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Notificacoes } from './entities/notificacoes.entity';
 import { Repository } from 'typeorm';
+import { WebsocketsGateway } from 'src/gateway/websockets.gateway';
 
 @Injectable()
 export class NotificacoesService {
 
   constructor(
     @InjectRepository(Notificacoes)
-    private readonly NotificaoRepository: Repository<Notificacoes>
+    private readonly NotificaoRepository: Repository<Notificacoes>,
+    private readonly socketGateway: WebsocketsGateway
   ) {
     
   }
@@ -23,6 +25,7 @@ export class NotificacoesService {
       
       await this.NotificaoRepository.save(novaNotificao)
 
+      this.socketGateway.handleMessage(JSON.stringify(novaNotificao))
 
       return { status: 200, message: 'Notificação enviada'}
     }catch(error){

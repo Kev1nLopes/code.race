@@ -1,5 +1,5 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiBody, ApiTags } from '@nestjs/swagger'
 import { Public } from 'src/decorators/public.decorator'
 import { ReqUser } from 'src/decorators/req-user.decorator'
 import { CreateUsuarioDto } from 'src/usuarios/dto/create-usuario.dto'
@@ -8,6 +8,7 @@ import { UsuariosService } from 'src/usuarios/usuarios.service'
 import { AuthService } from './auth.service'
 import { DuplicateUserGuard } from './guards/duplicate-user.guard'
 import { LocalAuthGuard } from './guards/local-auth.guard'
+import { LoginUsuarioDto } from 'src/usuarios/dto/login-usuario.dto'
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -19,6 +20,7 @@ export class AuthController {
 
   @Public()
   @Post('/signin')
+  @ApiBody({type: LoginUsuarioDto})
   @UseGuards(LocalAuthGuard)
   public signin(@ReqUser() user: Usuario) {
     const tokens = this.auth.jwtSign(user)
@@ -28,6 +30,7 @@ export class AuthController {
 
   @Public()
   @Post('/signup')
+  @ApiBody({type: CreateUsuarioDto})
   @UseGuards(DuplicateUserGuard)
   public async signup(@Body() newUser: CreateUsuarioDto) {
     const user = await this.users.create(newUser)
