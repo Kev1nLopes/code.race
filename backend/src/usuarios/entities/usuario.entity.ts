@@ -1,5 +1,6 @@
 import { Area } from 'src/areas/entities/area.entity'
 import { Log } from 'src/logs/entities/log.entity'
+import { Marker } from 'src/markers/entities/marker.entity'
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
 export enum UserRole {
@@ -48,6 +49,9 @@ export class Usuario {
 
   @OneToMany(() => Log, (logs) => logs.usuario)
   logs: Log[]
+
+  @OneToMany(() => Marker, (marker) => marker.usuario)
+  markers: Marker[]
 
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole

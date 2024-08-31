@@ -1,8 +1,10 @@
+import { Notificacoes } from 'src/notificacoes/entities/notificacoes.entity'
 import { Usuario } from 'src/usuarios/entities/usuario.entity'
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -36,6 +38,8 @@ export class Area {
   @Column({ default: false })
   ativa: boolean
 
+  @ManyToMany(() => Notificacoes, (notificacoes) => notificacoes.areas)
+  notificacoes: Notificacoes[]
   @CreateDateColumn()
   createdAt: Date
 

@@ -6,6 +6,8 @@ import { AppService } from './app.service'
 import { AreasModule } from './areas/areas.module'
 import { AuthModule } from './auth/auth.module'
 import { LogsModule } from './logs/logs.module'
+import { MarkersModule } from './markers/markers.module'
+import { NotificacoesModule } from './notificacoes/notificacoes.module'
 import { UsuariosModule } from './usuarios/usuarios.module'
 
 @Module({
@@ -24,6 +26,8 @@ import { UsuariosModule } from './usuarios/usuarios.module'
     UsuariosModule,
     AreasModule,
     LogsModule,
+    MarkersModule,
+    NotificacoesModule,
     AuthModule,
   ],
   controllers: [AppController],
