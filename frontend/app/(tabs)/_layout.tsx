@@ -1,9 +1,8 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { LucideBell, LucideHome, LucideInfo, LucideMap, LucideUserRound } from 'lucide-react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -18,8 +17,8 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+          tabBarIcon: ({ color }) => (
+            <LucideHome size={24} color={color} />
           ),
         }}
       />
@@ -27,8 +26,8 @@ export default function TabLayout() {
         name='map'
         options={{
           title: 'Mapa',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'map' : 'map-outline'} color={color} />
+          tabBarIcon: ({ color }) => (
+            <LucideMap size={24} color={color} />
           ),
         }}
       />
@@ -36,8 +35,26 @@ export default function TabLayout() {
         name="info"
         options={{
           title: 'Informações',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+          tabBarIcon: ({ color }) => (
+            <LucideInfo size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="notification"
+        options={{
+          title: 'Notificações',
+          tabBarIcon: ({ color }) => (
+            <LucideBell size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Perfil',
+          tabBarIcon: ({ color }) => (
+            <LucideUserRound size={24} color={color} />
           ),
         }}
       />

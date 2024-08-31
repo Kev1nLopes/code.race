@@ -1,13 +1,9 @@
 import { StyleSheet, Text } from 'react-native';
 
-export default function TabTwoScreen() {
+export default function Info() {
   return (
     <Text>
       Info Screen
     </Text>
   );
 }
-
-const styles = StyleSheet.create({
-  
-});
