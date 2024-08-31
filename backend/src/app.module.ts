@@ -6,6 +6,8 @@ import { AreasModule } from './areas/areas.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { LogsModule } from './logs/logs.module';
+import { MarkersModule } from './markers/markers.module';
+import { NotificacoesModule } from './notificacoes/notificacoes.module';
 
 
 @Module({
@@ -24,6 +26,8 @@ import { LogsModule } from './logs/logs.module';
     UsuariosModule,
     AreasModule,
     LogsModule,
+    MarkersModule,
+    NotificacoesModule,
 
   ],
   controllers: [AppController],

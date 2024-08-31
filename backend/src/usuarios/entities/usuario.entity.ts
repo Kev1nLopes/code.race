@@ -1,4 +1,5 @@
 import { Log } from "src/logs/entities/log.entity";
+import { Marker } from "src/markers/entities/marker.entity";
 import { AfterInsert, Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 
@@ -43,5 +44,8 @@ export class Usuario {
 
   @OneToMany(() => Log, (logs) => logs.usuario)
   logs: Log[]
-  
+
+
+  @OneToMany(() => Marker, (marker) => marker.usuario)
+  markers: Marker[]
 }

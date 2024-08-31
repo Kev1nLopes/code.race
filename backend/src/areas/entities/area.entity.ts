@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Notificacoes } from "src/notificacoes/entities/notificacoes.entity";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 export type Perimetro  ={
     perimetro: Poligonos[]
@@ -30,5 +31,7 @@ export class Area {
     @Column({ default: false})
     ativa: boolean
 
+    @ManyToMany(() => Notificacoes, notificacoes => notificacoes.areas)
+    notificacoes: Notificacoes[]
 
 }
