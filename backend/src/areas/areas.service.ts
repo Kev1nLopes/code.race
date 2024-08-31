@@ -1,106 +1,114 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateAreaDto } from './dto/create-area.dto';
-import { UpdateAreaDto } from './dto/update-area.dto';
-import { Token } from 'types/Token';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Area } from './entities/area.entity';
-import { Repository } from 'typeorm';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Usuario } from 'src/usuarios/entities/usuario.entity'
+import { Repository } from 'typeorm'
+import { CreateAreaDto } from './dto/create-area.dto'
+import { UpdateAreaDto } from './dto/update-area.dto'
+import { Area } from './entities/area.entity'
 
 @Injectable()
 export class AreasService {
-
-  /**
-   *
-   */
   constructor(
     @InjectRepository(Area)
-    private readonly AreaRepository: Repository<Area>
-  ) {
-    
-  }
+    private readonly areaRepository: Repository<Area>,
+  ) {}
 
-  async create(createAreaDto: CreateAreaDto) {
-    try{
-      if(createAreaDto.poligonos.perimetro.length == 0){
+  async create(createAreaDto: CreateAreaDto, user: Usuario) {
+    try {
+      if (createAreaDto.poligonos.perimetro.length == 0) {
         throw new BadRequestException('Informe um perimetro valido')
       }
 
-      let novaArea = this.AreaRepository.create();
+      let novaArea = this.areaRepository.create()
       novaArea.aprovado = false
       novaArea.poligonos = createAreaDto.poligonos
       novaArea.tipo = createAreaDto.tipo
+      novaArea.createdBy = user
 
-      await this.AreaRepository.save(novaArea)
+      await this.areaRepository.save(novaArea)
 
-      return { status: 200, message: novaArea}
-
-    }catch(error){
+      return novaArea
+    } catch (error) {
       throw new BadRequestException('')
     }
   }
 
   async findAll() {
-    try{
-      let Areas = this.AreaRepository.find();
+    try {
+      return this.areaRepository.find()
+    } catch (error) {
+      console.log(' ~ AreasService ~ findAll ~ error:', error)
+      throw new BadRequestException('Não foi possível consultar as areas')
+    }
+  }
 
-      return { status: 200, message: Areas}
-
-    }catch(error){
-      console.log(" ~ AreasService ~ findAll ~ error:", error)
+  async findAllByMe(user: Usuario) {
+    try {
+      return this.areaRepository.findBy({
+        createdBy: {
+          id: user.id,
+        },
+      })
+    } catch (error) {
+      console.log(' ~ AreasService ~ findAll ~ error:', error)
       throw new BadRequestException('Não foi possível consultar as areas')
     }
   }
 
   async findOne(id: number) {
-    try{
-      let Area = await this.AreaRepository.findOne({
+    try {
+      let area = await this.areaRepository.findOne({
         where: {
-          id: id
-        }
+          id: id,
+        },
       })
-      if(!Area) throw new NotFoundException('Nenhuma area encontrada')
 
-      return { status: 200, message: Area}
-    }catch(error){
+      if (!area) throw new NotFoundException('Nenhuma area encontrada')
+
+      return area
+    } catch (error) {
       throw new BadRequestException('Não foi possível consultar a area')
     }
   }
 
   async update(id: number, updateAreaDto: UpdateAreaDto) {
-    try{
+    try {
+      const area = await this.findOne(id)
 
-      let Area = await this.AreaRepository.findOne({
-        where: {
-          id: id
-        }
-      })
+      area.tipo = updateAreaDto.tipo
+      area.poligonos = updateAreaDto.poligonos
 
-      if(!Area) throw new NotFoundException('Nenhuma area encontrada')
-
-      return { status: 200, message: Area }
-    }catch(error){
+      return this.areaRepository.save(area)
+    } catch (error) {
       throw new BadRequestException('Não foi possível buscar a area')
     }
   }
 
   async remove(id: number) {
-    try{
-      let Area = await this.AreaRepository.findOne({
-        where: {
-          id: id
-        }
-      })
+    try {
+      let area = await this.findOne(id)
 
-      if(!Area) throw new NotFoundException('Nenhuma area encontrada')
+      area.ativa = false
 
-      
-      Area.ativa = false
-
-      return { status: 200, message: 'Area removida com sucesso'}
-
-
-    }catch(error){
+      return this.areaRepository.save(area)
+    } catch (error) {
       throw new BadRequestException('Não foi possível remover a area')
+    }
+  }
+
+  async aprovar(id: number) {
+    try {
+      let area = await this.findOne(id)
+
+      area.aprovado = true
+
+      return this.areaRepository.save(area)
+    } catch (error) {
+      throw new BadRequestException('Não foi possível aprovar a area')
     }
   }
 }

@@ -1,37 +1,51 @@
-import { Notificacoes } from "src/notificacoes/entities/notificacoes.entity";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Notificacoes } from 'src/notificacoes/entities/notificacoes.entity'
+import { Usuario } from 'src/usuarios/entities/usuario.entity'
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm'
 
-export type Perimetro  ={
-    perimetro: Poligonos[]
+export type Perimetro = {
+  perimetro: Poligonos[]
 }
-export type Poligonos  = {
-    latitude: String;
-    longitude: String
+export type Poligonos = {
+  latitude: String
+  longitude: String
 }
 
 @Entity()
 export class Area {
+  @PrimaryGeneratedColumn()
+  id: number
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column()
+  tipo: String
 
+  @Column({
+    type: 'json',
+    nullable: false,
+  })
+  poligonos: Perimetro
 
-    @Column()
-    tipo: String;
+  @Column({ default: false })
+  aprovado: boolean
 
-    @Column({
-        type: 'json',
-        nullable: false
-    })
-    poligonos: Perimetro 
+  @Column({ default: false })
+  ativa: boolean
 
-    @Column({ default: false })
-    aprovado: boolean
+  @ManyToMany(() => Notificacoes, (notificacoes) => notificacoes.areas)
+  notificacoes: Notificacoes[]
+  @CreateDateColumn()
+  createdAt: Date
 
-    @Column({ default: false})
-    ativa: boolean
+  @UpdateDateColumn()
+  updatedAt: Date
 
-    @ManyToMany(() => Notificacoes, notificacoes => notificacoes.areas)
-    notificacoes: Notificacoes[]
-
+  @ManyToOne(() => Usuario, (usuario) => usuario.areas)
+  createdBy: Usuario
 }
