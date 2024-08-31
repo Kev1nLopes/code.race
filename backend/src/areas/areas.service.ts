@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
 import { Token } from 'types/Token';
@@ -30,51 +30,77 @@ export class AreasService {
       novaArea.poligonos = createAreaDto.poligonos
       novaArea.tipo = createAreaDto.tipo
 
-
       await this.AreaRepository.save(novaArea)
 
-      return { status: 200, message: { msg: 'Area criada com sucesso', data: novaArea}}
+      return { status: 200, message: novaArea}
 
+    }catch(error){
+      throw new BadRequestException('')
+    }
+  }
+
+  async findAll() {
+    try{
+      let Areas = this.AreaRepository.find();
+
+      return { status: 200, message: Areas}
+
+    }catch(error){
+      console.log(" ~ AreasService ~ findAll ~ error:", error)
+      throw new BadRequestException('Não foi possível consultar as areas')
+    }
+  }
+
+  async findOne(id: number) {
+    try{
+      let Area = await this.AreaRepository.findOne({
+        where: {
+          id: id
+        }
+      })
+      if(!Area) throw new NotFoundException('Nenhuma area encontrada')
+
+      return { status: 200, message: Area}
+    }catch(error){
+      throw new BadRequestException('Não foi possível consultar a area')
+    }
+  }
+
+  async update(id: number, updateAreaDto: UpdateAreaDto) {
+    try{
+
+      let Area = await this.AreaRepository.findOne({
+        where: {
+          id: id
+        }
+      })
+
+      if(!Area) throw new NotFoundException('Nenhuma area encontrada')
+
+      return { status: 200, message: Area }
+    }catch(error){
+      throw new BadRequestException('Não foi possível buscar a area')
+    }
+  }
+
+  async remove(id: number) {
+    try{
+      let Area = await this.AreaRepository.findOne({
+        where: {
+          id: id
+        }
+      })
+
+      if(!Area) throw new NotFoundException('Nenhuma area encontrada')
 
       
-    }catch(error){
-      throw new BadRequestException('')
-    }
-  }
+      Area.ativa = false
 
-  findAll() {
-    try{
+      return { status: 200, message: 'Area removida com sucesso'}
 
 
     }catch(error){
-      throw new BadRequestException('')
-    }
-  }
-
-  findOne(id: number) {
-    try{
-
-
-    }catch(error){
-      throw new BadRequestException('')
-    }
-  }
-
-  update(id: number, updateAreaDto: UpdateAreaDto) {
-    try{
-
-
-    }catch(error){
-      throw new BadRequestException('')
-    }
-  }
-
-  remove(id: number) {
-    try{
-
-
-    }catch(error){
-      throw new BadRequestException('')
+      throw new BadRequestException('Não foi possível remover a area')
     }
   }
 }

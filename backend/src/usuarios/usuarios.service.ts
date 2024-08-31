@@ -25,9 +25,9 @@ export class UsuariosService {
           email: createUsuarioDto.email
         }
       });
+      console.log("🚀 ~ UsuariosService ~ create ~ UserEmail:", UserEmail)
 
       if(UserEmail){
-        throw new BadRequestException('Este e-mail já foi vinculado a um usuário', { cause: {}, description: 'Usuário ja existe'})
       }
 
       // Encriptar a senha
@@ -50,7 +50,7 @@ export class UsuariosService {
 
     }catch(error){
       console.log("UsuariosService ~ create ~ error:", error)
-      throw new BadRequestException('Erro ao criar o usuário', { cause: error, description: 'Não foi possível criar o usuário'})
+      throw new BadRequestException('Erro ao criar o usuário')
     }
 
   }

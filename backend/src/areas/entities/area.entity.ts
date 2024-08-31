@@ -27,5 +27,8 @@ export class Area {
     @Column({ default: false })
     aprovado: boolean
 
+    @Column({ default: false})
+    ativa: boolean
+
 
 }
