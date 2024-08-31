@@ -1,24 +1,22 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { CreateUsuarioDto } from './create-usuario.dto';
+import { ApiProperty, PartialType } from '@nestjs/swagger'
+import { CreateUsuarioDto } from './create-usuario.dto'
 
 export class UpdateUsuarioDto extends PartialType(CreateUsuarioDto) {
-
+  @ApiProperty()
+  id: number
 
   @ApiProperty()
-  cpf: String;
+  cpf: number
 
   @ApiProperty()
-  cep: String;
+  cep: number
 
   @ApiProperty()
-  uf: String;
+  uf: number
 
   @ApiProperty()
-  cidade: String;
+  cidade: number
 
   @ApiProperty()
-  bairro: String;
-
-
-
+  bairro: number
 }
