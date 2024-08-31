@@ -44,7 +44,7 @@ export default function Map() {
     }
 
     useEffect(()=>{
-        api.get<SafePlace[]>("/pontos").then((res)=>{
+        /*api.get<SafePlace[]>("/pontos").then((res)=>{
             const data = res.data;
             data.forEach(e=> e.coordinate = {latitude: e.latitude!, longitude: e.longitude!})
             setSafePlaces(data)
@@ -55,8 +55,8 @@ export default function Map() {
             setRiskAreas(res.data);
         }).catch((err)=>{
             console.log("[GET/AREAS] "+ err)
-        })
-        /*setSafePlaces([
+        })*/
+        setSafePlaces([
             {
                 id: "1",
                 coordinate: {latitude: -29.691828842370427, longitude:-53.80606971771388},
@@ -79,7 +79,7 @@ export default function Map() {
                     ]
                 }
             }
-        ])*/
+        ])
     }, [])
 
     const addRisk = () => {
@@ -149,7 +149,7 @@ export default function Map() {
                         description={marker.description}
                         image={require("@/assets/images/safeplace.png")}
                     />
-                )): (
+                )) : (
                     <Marker 
                         coordinate={position}
                         draggable={true}
