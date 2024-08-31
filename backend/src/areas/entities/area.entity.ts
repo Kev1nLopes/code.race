@@ -13,9 +13,19 @@ import {
 export type Perimetro = {
   perimetro: Poligonos[]
 }
+
 export type Poligonos = {
-  latitude: String
-  longitude: String
+  latitude: string
+  longitude: string
+}
+
+export enum StatusArea {
+  EM_RISCO = 'EM_RISCO',
+  EM_ALERTA = 'EM_ALERTA',
+  EM_PERIGO = 'EM_PERIGO',
+  SEM_RISCO = 'SEM_RISCO',
+  SEGURADA = 'SEGURADA',
+  EM_ANALISE = 'EM_ANALISE',
 }
 
 @Entity()
@@ -24,7 +34,10 @@ export class Area {
   id: number
 
   @Column()
-  tipo: String
+  nome: string
+
+  @Column()
+  tipo: string
 
   @Column({
     type: 'json',
@@ -32,8 +45,14 @@ export class Area {
   })
   poligonos: Perimetro
 
+  @Column({ type: 'enum', enum: StatusArea, default: StatusArea.EM_ANALISE })
+  status: StatusArea
+
   @Column({ default: false })
   aprovado: boolean
+
+  @Column({ type: 'date', nullable: true })
+  analisadoEm: Date
 
   @Column({ default: false })
   ativa: boolean
