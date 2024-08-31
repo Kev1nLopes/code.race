@@ -21,7 +21,7 @@ export class UsuariosController {
     const token = JWTUtil.getDadosToken(req)
     return this.usuariosService.remove(token)
   }
-
+  
   @Get('@me')
   getUsuario(@ReqUser() user: Usuario) {
     return this.usuariosService.getByEmail(user.email)

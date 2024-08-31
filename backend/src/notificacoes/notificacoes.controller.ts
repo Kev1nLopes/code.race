@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/
 import { NotificacoesService } from './notificacoes.service';
 import { CreateNotificacoeDto } from './dto/create-notificacoe.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/decorators/public.decorator';
 
 @Controller('notificacoes')
 @ApiTags('Notificacoes')
@@ -17,6 +18,7 @@ export class NotificacoesController {
   }
 
   @Get()
+  @Public()
   async findAll(@Res() res) {
     
     const response = await this.notificacoesService.findAll();
@@ -24,6 +26,7 @@ export class NotificacoesController {
   }
 
   @Get(':id')
+  @Public()
   async findOne(@Param('id') id: string, @Res() res) {
     const response = await this.notificacoesService.findOne(+id);
     res.status(response.status).json(response.message)

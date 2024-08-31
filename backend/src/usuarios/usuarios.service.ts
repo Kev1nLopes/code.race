@@ -125,6 +125,8 @@ export class UsuariosService {
         },
       })
 
+      delete Usuario.senha
+
       if (!Usuario) throw new NotFoundException('Nenhum usuário encontrado')
 
       return Usuario
