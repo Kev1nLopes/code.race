@@ -25,7 +25,7 @@ export class AuthController {
   public signin(@ReqUser() user: Usuario) {
     const tokens = this.auth.jwtSign(user)
 
-    return tokens
+    return { user, accessToken: tokens.access_token }
   }
 
   @Public()

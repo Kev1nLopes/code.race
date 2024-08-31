@@ -1,13 +1,15 @@
-import { Body, Controller, Patch, Req } from '@nestjs/common'
+import { Body, Controller, Get, Patch, Req } from '@nestjs/common'
 import { ApiBody, ApiTags } from '@nestjs/swagger'
+import { ReqUser } from 'src/decorators/req-user.decorator'
 import { JWTUtil } from 'utils/jwt-util'
 import { UpdateUsuarioDto } from './dto/update-usuario.dto'
+import { Usuario } from './entities/usuario.entity'
 import { UsuariosService } from './usuarios.service'
-@Controller()
+@Controller('usuarios')
+@ApiTags('Usuarios')
 export class UsuariosController {
   constructor(private readonly usuariosService: UsuariosService) {}
 
-  @ApiTags('Usuarios')
   @Patch()
   @ApiBody({ type: UpdateUsuarioDto })
   update(@Body() updateUsuarioDto: UpdateUsuarioDto, @Req() req) {
@@ -15,9 +17,13 @@ export class UsuariosController {
     return this.usuariosService.update(updateUsuarioDto)
   }
 
-  @ApiTags('Usuarios')
   remove(@Req() req) {
     const token = JWTUtil.getDadosToken(req)
     return this.usuariosService.remove(token)
+  }
+
+  @Get('@me')
+  getUsuario(@ReqUser() user: Usuario) {
+    return this.usuariosService.getByEmail(user.email)
   }
 }
