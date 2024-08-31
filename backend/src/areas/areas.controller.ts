@@ -32,7 +32,6 @@ export class AreasController {
 
   @Get()
   @Public()
-  @Roles(UserRole.FISCAL, UserRole.INSTITUTION)
   async findAll() {
     return this.areasService.findAll()
   }
