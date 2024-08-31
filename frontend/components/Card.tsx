@@ -16,5 +16,6 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: '#cecece',
     borderRadius: 6,
+    height: 40,
   },
 });
