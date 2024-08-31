@@ -18,6 +18,7 @@ export function AreasSubmetidasCard() {
           onRefresh={areas.refetch}
         />
       }
+      contentContainerStyle={{ flexGrow: 1 }}
     >
       {areas.data.map(area => (
         <AreaCard key={area.id} area={area} />

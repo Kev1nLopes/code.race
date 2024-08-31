@@ -11,7 +11,7 @@ export default function Notifications() {
   }
 
   return (
-    <View flex={1} marginTop='$6'>
+    <View flex={1}>
       <ScrollView
         refreshControl={
           <RefreshControl
