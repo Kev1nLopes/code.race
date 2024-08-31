@@ -47,39 +47,34 @@ export default function Map() {
         api.get<SafePlace[]>("/pontos").then((res)=>{
             const data = res.data;
             data.forEach(e=> e.coordinate = {latitude: e.latitude!, longitude: e.longitude!})
-            setSafePlaces([...data, ...safePlaces])
+            setSafePlaces([...data, {
+                id: "1",
+                coordinate: {latitude: -29.691828842370427, longitude:-53.80606971771388},
+                title: "Abrigo",
+                description: "Local, seguro com infrestrutura e espeço para abrigar necessatados em situações emergenciais!"
+            }])
         }).catch((err)=>{
             console.log("[GET/MARKERS] "+err)
         })
         api.get<RiskArea[]>("/areas").then((res)=>{
-            setRiskAreas([...res.data, ...riskAreas]);
+            setRiskAreas([...res.data, 
+                {
+                    aprovado: true,
+                    id: 1,
+                    tipo: "aaa",
+                    coordinates: {
+                        perimetro: [
+                            {latitude: -29.677382913206184, longitude: -53.82006642805862},
+                            {latitude: -29.676098510850235, longitude: -53.80983339419876},
+                            {latitude: -29.683121577855378, longitude: -53.809111647072505},
+                            {latitude: -29.68275195554361, longitude: -53.81800649362528},
+                            {latitude: -29.677382913206184, longitude: -53.82006642805862}
+                        ]
+                    }
+                }]);
         }).catch((err)=>{
             console.log("[GET/AREAS] "+ err)
         })
-        setSafePlaces([
-            {
-                id: "1",
-                coordinate: {latitude: -29.691828842370427, longitude:-53.80606971771388},
-                title: "Hospital",
-                description: "Descrição hospital"
-            }
-        ])
-        setRiskAreas([
-            {
-                aprovado: true,
-                id: 1,
-                tipo: "aaa",
-                coordinates: {
-                    perimetro: [
-                        {latitude: -29.677382913206184, longitude: -53.82006642805862},
-                        {latitude: -29.676098510850235, longitude: -53.80983339419876},
-                        {latitude: -29.683121577855378, longitude: -53.809111647072505},
-                        {latitude: -29.68275195554361, longitude: -53.81800649362528},
-                        {latitude: -29.677382913206184, longitude: -53.82006642805862}
-                    ]
-                }
-            }
-        ])
     }, [])
 
     const addRisk = () => {
@@ -101,7 +96,7 @@ export default function Map() {
                     latitude: area.coordinates.perimetro[0].latitude,
                     longitude: area.coordinates.perimetro[0].longitude
                 },
-                description: "Area com severo risco de deslizamento, se houver mais chuvas os destroços podem se espalhar ainda mais",
+                description: "Area com severo risco de deslizamento, se houver mais chuvas os destroços podem se espalhar ainda mais.",
                 id: "3",
                 title: "Deslizamento"
             })
@@ -110,16 +105,16 @@ export default function Map() {
     }
  
     const saveRisk = () => {
-        api.post("/ponto", 
+        api.post("/pontos", 
             {
                 titulo: risk.titulo,
                 descricao: risk.descricao,
-                latitude: position.latitude,
-                longitude: position.longitude
+                latitude: position.latitude.toString(),
+                longitude: position.longitude.toString()
             }).then((res)=>{
             console.log("sla poha")
             Alert.alert("Sucesso!", "Problema enviado e sera avaliado pelas entidades responsaveis")
-        }).finally(()=>{
+        }).catch((err)=>console.log("[POST/PONTO] "+ err)).finally(()=>{
             setRisk(undefined)
         })
     }
