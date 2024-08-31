@@ -1,3 +1,4 @@
+import { Bitter_600SemiBold } from '@expo-google-fonts/bitter'
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
@@ -22,6 +23,7 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
     InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+    Bitter: Bitter_600SemiBold,
   })
 
   useEffect(() => {

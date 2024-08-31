@@ -4,6 +4,7 @@ import React from 'react'
 import { TabBarIcon } from '@/components/navigation/TabBarIcon'
 import { Colors } from '@/constants/Colors'
 import { useColorScheme } from '@/hooks/useColorScheme'
+import { Text, YStack } from 'tamagui'
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
@@ -12,14 +13,24 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarHideOnKeyboard: true
+        headerShown: true,
+        tabBarHideOnKeyboard: true,
+        headerLeft: () => (
+          <YStack marginBlock='$4' paddingInline='$4' borderRightWidth={1}>
+            <Text color='black' fontFamily='Bitter' fontWeight={600}>
+              Safer
+            </Text>
+            <Text color='black' fontFamily='Bitter' fontWeight={600}>
+              Now
+            </Text>
+          </YStack>
+        ),
       }}
     >
       <Tabs.Screen
         name='index'
         options={{
-          title: 'Home',
+          title: 'Início',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? 'home' : 'home-outline'}
@@ -52,7 +63,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='notification'
         options={{
-          title: 'Notiicações',
+          title: 'Notificações',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? 'notifications' : 'notifications-outline'}
