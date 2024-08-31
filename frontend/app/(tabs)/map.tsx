@@ -44,18 +44,18 @@ export default function Map() {
     }
 
     useEffect(()=>{
-        /*api.get<SafePlace[]>("/pontos").then((res)=>{
+        api.get<SafePlace[]>("/pontos").then((res)=>{
             const data = res.data;
             data.forEach(e=> e.coordinate = {latitude: e.latitude!, longitude: e.longitude!})
-            setSafePlaces(data)
+            setSafePlaces([...data, ...safePlaces])
         }).catch((err)=>{
             console.log("[GET/MARKERS] "+err)
         })
         api.get<RiskArea[]>("/areas").then((res)=>{
-            setRiskAreas(res.data);
+            setRiskAreas([...res.data, ...riskAreas]);
         }).catch((err)=>{
             console.log("[GET/AREAS] "+ err)
-        })*/
+        })
         setSafePlaces([
             {
                 id: "1",
