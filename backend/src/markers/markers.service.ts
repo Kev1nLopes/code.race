@@ -23,6 +23,7 @@ export class MarkersService {
       novoMarker.descricao = createMarkerDto.descricao
       novoMarker.latitude = createMarkerDto.latitude
       novoMarker.longitude = createMarkerDto.longitude
+      novoMarker.titulo = createMarkerDto.titulo
     
       await this.markerRepository.save(novoMarker)
 

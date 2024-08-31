@@ -7,6 +7,9 @@ export class Marker {
 
     @PrimaryGeneratedColumn()
     id: Number
+
+    @Column()
+    titulo: String
     
     @Column({type: 'text', nullable: false})
     descricao: String
