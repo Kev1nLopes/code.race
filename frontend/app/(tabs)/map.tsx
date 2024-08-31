@@ -110,16 +110,16 @@ export default function Map() {
     }
  
     const saveRisk = () => {
-        api.post("/ponto", 
+        api.post("/pontos", 
             {
                 titulo: risk.titulo,
                 descricao: risk.descricao,
-                latitude: position.latitude,
-                longitude: position.longitude
+                latitude: position.latitude.toString(),
+                longitude: position.longitude.toString()
             }).then((res)=>{
             console.log("sla poha")
             Alert.alert("Sucesso!", "Problema enviado e sera avaliado pelas entidades responsaveis")
-        }).finally(()=>{
+        }).catch((err)=>console.log("[POST/PONTO] "+ err)).finally(()=>{
             setRisk(undefined)
         })
     }
