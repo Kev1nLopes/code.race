@@ -1,3 +1,4 @@
+import { Log } from "src/logs/entities/log.entity";
 import { AfterInsert, Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 
@@ -40,4 +41,7 @@ export class Usuario {
   @Column({default: true, type: 'boolean'})
   ativo: boolean;
 
+  @OneToMany(() => Log, (logs) => logs.usuario)
+  logs: Log[]
+  
 }
